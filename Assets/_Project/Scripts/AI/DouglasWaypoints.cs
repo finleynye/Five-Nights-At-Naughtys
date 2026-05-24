@@ -24,7 +24,7 @@ public class DouglasWaypoints
         {
             case false:
                 {
-                    //So he needs to start in the elevator, and pick a random point from his currentPoint's possible moves list
+                    //so he needs to start in the elevator, and pick a random point from his currentPoint's possible moves list
                     //then he needs to go to that new point, and set it to his current
                     //then wash rinse repeat ideally
 
@@ -34,16 +34,13 @@ public class DouglasWaypoints
                 }
             case true:
                 {
-                    //This will let the player manually force douglas to divert away from the filing room, and go to a set position
+                    //this will let the player manually force douglas to divert away from the filing room, and go to a set position
                     if (forceMoveTo is not null)
                         caller.transform.position = forceMoveTo.position;
                     break;
                 }
         }
 
-        if (!addStress) return;
-        var stressAmount = (int)(100 - Vector2.Distance(caller.transform.position,
-            caller.player.transform.position)) / caller.stressMultiplier;
-        CalculateStress.UpdateStress(stressAmount);
+        //phone BPM now reads Douglas distance every frame, so movement should not permanently add stress
     }
 }

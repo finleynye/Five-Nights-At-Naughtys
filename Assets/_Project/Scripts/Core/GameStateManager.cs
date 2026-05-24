@@ -11,9 +11,6 @@ public enum GameState
     Testing
 }
 
-/// <summary>
-/// Tracks coarse game state for setup code. Gameplay systems should keep their own detailed state.
-/// </summary>
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance { get; private set; }

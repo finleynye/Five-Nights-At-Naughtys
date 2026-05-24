@@ -21,6 +21,9 @@ public class PlayerLook : MonoBehaviour
 
     [Header("Animation")]
     public Animator cameraAnim;
+    [SerializeField] private bool ignoreLookInputDuringCameraTransitions = true;
+
+    private float cameraTransitionTimer;
 
     private void Start()
     {
@@ -31,12 +34,16 @@ public class PlayerLook : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (PC.isOn) return;
 
-        _mouseX = Input.GetAxisRaw("Mouse X");
-        _mouseY = Input.GetAxisRaw("Mouse Y");
+        var canLook = !ignoreLookInputDuringCameraTransitions || cameraTransitionTimer <= 0f;
+        if (cameraTransitionTimer > 0f)
+            cameraTransitionTimer -= Time.deltaTime;
+
+        _mouseX = canLook ? Input.GetAxisRaw("Mouse X") : 0f;
+        _mouseY = canLook ? Input.GetAxisRaw("Mouse Y") : 0f;
 
         _rotX -= _mouseY * sensitivity * _multiplier;
         _rotY += _mouseX * sensitivity * _multiplier;
@@ -127,5 +134,18 @@ public class PlayerLook : MonoBehaviour
     => right = true;
     public void isntRight()
     => right = false;
+
+    public void SetCameraRestriction(bool isIdle, bool isBack, bool isLeft, bool isRight)
+    {
+        idle = isIdle;
+        back = isBack;
+        left = isLeft;
+        right = isRight;
+    }
+
+    public void BeginCameraTransition(float duration)
+    {
+        cameraTransitionTimer = Mathf.Max(cameraTransitionTimer, duration);
+    }
 }
 
